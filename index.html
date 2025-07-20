@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Subscriber Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .phone-input {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .phone-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #3a5bd9;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+        
+        .btn-outline:hover {
+            background-color: #f0f4ff;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            position: relative;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+        
+        .divider::before {
+            left: 0;
+        }
+        
+        .divider::after {
+            right: 0;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+                margin: 0 15px;
+            }
+            
+            .logo h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <!-- Add your logo here -->
+            <h1>Subscriber Portal</h1>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <div class="phone-input">
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div id="phoneError" class="error-message">Please enter a valid phone number</div>
+                <div id="loginError" class="error-message">User not found. Please register.</div>
+            </div>
+            
+            <button type="submit" class="btn" id="loginBtn">
+                <span id="btnText">Login</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+            
+            <div class="divider">OR</div>
+            
+            <button type="button" class="btn btn-outline" id="registerBtn">
+                Register New Account
+            </button>
+        </form>
+        
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register here</a>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script>
+        // Initialize phone input with country selector
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "in",
+            separateDialCode: true,
+            preferredCountries: ["in", "us", "gb"],
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const phoneNumber = iti.getNumber();
+            const phoneError = document.getElementById('phoneError');
+            const loginError = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            
+            // Reset error states
+            phoneError.style.display = 'none';
+            loginError.style.display = 'none';
+            
+            // Validate phone number
+            if (!phoneNumber || !iti.isValidNumber()) {
+                phoneError.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            btnText.textContent = 'Logging in...';
+            spinner.style.display = 'block';
+            loginBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // List of pre-registered numbers for demo
+                const registeredNumbers = [
+                    '+919876543210',
+                    '+919123456789',
+                    '+918888888888'
+                ];
+                
+                if (registeredNumbers.includes(phoneNumber)) {
+                    // Successful login - redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Show error for unregistered number
+                    loginError.style.display = 'block';
+                    btnText.textContent = 'Login';
+                    spinner.style.display = 'none';
+                    loginBtn.disabled = false;
+                }
+            }, 1000);
+        });
+        
+        // Register button click handler
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            window.location.href = 'register.html';
+        });
+    </script>
+</body>
+</html>

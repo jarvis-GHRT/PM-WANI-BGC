@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Subscriber Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 5px 0;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .phone-input {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .phone-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #3a5bd9;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f0f4ff;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .register-container {
+                padding: 20px;
+                margin: 0 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .logo h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <button class="back-btn" id="backBtn">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </button>
+        
+        <div class="logo">
+            <h1>Create Account</h1>
+            <p>Fill in your details to register</p>
+        </div>
+        
+        <form id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" class="form-control" required>
+                    <div id="nameError" class="error-message">Please enter your full name</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" class="form-control" required>
+                    <div id="emailError" class="error-message">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <div class="phone-input">
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div id="phoneError" class="error-message">Please enter a valid phone number</div>
+                    <div id="phoneExistsError" class="error-message">This phone number is already registered</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="address">Address <span class="required">*</span></label>
+                    <input type="text" id="address" class="form-control" required>
+                    <div id="addressError" class="error-message">Please enter your address</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City <span class="required">*</span></label>
+                    <input type="text" id="city" class="form-control" required>
+                    <div id="cityError" class="error-message">Please enter your city</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zip">ZIP Code <span class="required">*</span></label>
+                    <input type="text" id="zip" class="form-control" required>
+                    <div id="zipError" class="error-message">Please enter a valid ZIP code</div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn" id="registerBtn">
+                <span id="btnText">Create Account</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+            
+            <div class="success-message" id="successMessage">
+                Registration successful! Redirecting to login...
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script>
+        // Initialize phone input with country selector
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "in",
+            separateDialCode: true,
+            preferredCountries: ["in", "us", "gb"],
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        // Back button click handler
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phoneNumber = iti.getNumber();
+            const address = document.getElementById('address').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const zip = document.getElementById('zip').value.trim();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Validate full name
+            if (fullName === '') {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate phone number
+            if (!phoneNumber || !iti.isValidNumber()) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate address
+            if (address === '') {
+                document.getElementById('addressError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate city
+            if (city === '') {
+                document.getElementById('cityError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate ZIP code (basic validation)
+            const zipRegex = /^[0-9]{5,10}$/;
+            if (!zipRegex.test(zip)) {
+                document.getElementById('zipError').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phoneNumber = iti.getNumber();
+            const address = document.getElementById('address').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const zip = document.getElementById('zip').value.trim();
+            
+            const registerBtn = document.getElementById('registerBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Show loading state
+            btnText.textContent = 'Creating Account...';
+            spinner.style.display = 'block';
+            registerBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // List of pre-registered numbers for demo
+                const registeredNumbers = [
+                    '+919876543210',
+                    '+919123456789',
+                    '+918888888888'
+                ];
+                
+                if (registeredNumbers.includes(phoneNumber)) {
+                    // Show error if number already registered
+                    document.getElementById('phoneExistsError').style.display = 'block';
+                    btnText.textContent = 'Create Account';
+                    spinner.style.display = 'none';
+                    registerBtn.disabled = false;
+                    
+                    // Scroll to the error
+                    document.getElementById('phoneError').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Store user data in localStorage for demo purposes
+                    const userData = {
+                        fullName,
+                        email,
+                        phoneNumber,
+                        address,
+                        city,
+                        zip,
+                        registeredAt: new Date().toISOString()
+                    };
+                    
+                    // In a real app, you would send this to your backend
+                    console.log('User registered:', userData);
+                    
+                    // Redirect to login after a delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html?registered=true';
+                    }, 2000);
+                }
+            }, 1500);
+        });
+        
+        // Check if redirected from successful registration
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('registered') === 'true') {
+                // Show success message on login page
+                // This will be handled in index.html
+            }
+        };
+    </script>
+</body>
+</html>
